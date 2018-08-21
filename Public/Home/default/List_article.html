@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<block name="title"><title>列表模式</title></block>
+	<block name="source">
+		<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.css">
+		<script src="__PUBLIC__/js/jquery-1.9.1.js"></script>
+		<script src="__PUBLIC__/bootstrap/js/bootstrap.js"></script>
+		<script src="__PUBLIC__/bootstrap/js/docs.min.js"></script>
+	</block>
+</head>
+<body>
+	<div class="container">
+		<h1 class="page-header">列表模式</h1>
+		<div class="row">
+			<div class="col-md-2">
+				<div class="panel panel-default">
+					<div class="panel-heading">{$cateInfo.name}</div>
+					<div class="list-group">
+						<foreach name="sonList" item="son">
+						<a href="{$son.url}" class="list-group-item">{$son.name}</a>
+						</foreach>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-10">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h1 class="panel-title">{$cateInfo.name}</h1>
+					</div>
+					<div class="list-group">
+						<foreach name="articleList" item="article">
+						<a href="{$article.url}" class="list-group-item">{$article.title}
+						<span class="pull-right">{$article.publishtime|date='Y/m/d H:i:s',###}</span></a>
+						</foreach>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

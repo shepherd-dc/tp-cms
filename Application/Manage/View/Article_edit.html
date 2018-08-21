@@ -1,0 +1,155 @@
+<extend name="Index:index"/>
+<block name="title"><title>编辑文章</title></block>
+<block name="source">
+	<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.css">
+	<script src="__PUBLIC__/js/jquery-1.9.1.js"></script>
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+	<script src="__PUBLIC__/bootstrap/js/bootstrap.js"></script>
+	<!-- Ueditor在线编辑器 -->
+	<script src="__DATA__/ueditor/ueditor.config.js"></script>
+	<script src="__DATA__/ueditor/ueditor.all.js"></script>
+	<!-- colorpicker插件 -->
+	<link rel="stylesheet" href="__DATA__/colorpicker/css/jquery.bigcolorpicker.css">
+	<script src="__DATA__/colorpicker/js/jquery.bigcolorpicker.min.js"></script>
+	<!-- datetimepicker插件 -->
+	<link rel="stylesheet" href="__DATA__/datetimepicker/jquery.datetimepicker.css">
+	<script src="__DATA__/datetimepicker/build/jquery.datetimepicker.full.js"></script>
+
+</block>
+<block name="main">
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">编辑文章</h3>
+	  </div>
+	  <div class="panel-body">
+	  	<form action="{:U('Article/update')}" method="post" class="form-horizontal">
+
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">标题</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="text" class="form-control" name="title" value="{$article.title}">
+	  	    </div>
+	  	  </div>
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">副标题</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="text" class="form-control" name="subhead" value="{$article.subhead}">
+	  	    </div>
+	  	  </div>
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">标题颜色</label>
+	  	    <div class="col-sm-9">
+		  	  <div class="col-sm-10 col-padding">  
+	  	           <input type="text" class="form-control" name="color" id="color" value="{$article.color}" readonly>
+	  	      </div>
+  	          <div class="col-sm-2 col-padding">
+	  	          <button class="btn btn-success color-btn" type="button">请选择颜色</button>
+  	          </div> 
+	  	      <script>
+	  	      	$(".color-btn").bigColorpicker("color");
+	  	      </script>
+	  	    </div>
+	  	  </div>
+	  	  
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">所属栏目</label>
+	  	    <div class="col-sm-9">
+	  	    	<div class="col-sm-10 col-padding">
+		  	      <select class="form-control" name="cid">
+		  	      	<option value="0">顶级栏目</option>
+		  	      	<foreach name="cate" item="vol">
+		  	      		<if condition="$cid eq $vol['id']">
+			  	        <option value="{$vol.id}" selected>{$vol.delimiter}{$vol.name}</option>
+			  	        <else/>
+			  	        <option value="{$vol.id}">{$vol.delimiter}{$vol.name}</option>
+			  	        </if>
+		  	        </foreach>
+		  	      </select>
+	  	      </div>
+	  	    </div>
+	  	  </div>
+
+	  	  <div class="form-group litpic-show">
+		  	  <label for="" class="col-sm-2 control-label">缩略图</label>
+		  	  <div class="col-sm-9">
+			  	  <div class="col-sm-10 col-padding">  
+		  	          <input type="text" class="form-control" name="litpic" id="litpic" value="{$article.litpic}" readonly>
+		  	          <input type="hidden" name="orgnl_pic" value="{$article.litpic}">
+		  	          <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  	      </div>
+	  	          <div class="col-sm-2 col-padding">
+		  	          <button class="btn btn-success litpic-btn" type="button">
+		  	          	<span>添加缩略图</span>
+						<input type="file" class="form-control" name="mypic[]" id="fileupload">
+		  	          </button>
+	  	          </div>
+	  	          <div class="litpic-tip"></div>
+	  	          <div id="litpic-show">
+	  	          	<img src="__UPLOADS__{$article.litpic}" alt="">
+	  	          </div>
+	  	      </div>
+	  	      <script>
+	  	      	$('.close').click(function(){
+	  	      		$('#litpic-show img').add('.close').hide();
+	  	      		$(':input[name="litpic"]').val('');
+	  	      	});
+	  	      </script>
+	  	  </div>
+
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">作者</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="text" class="form-control" name="author" value="{$article.author}">
+	  	    </div>
+	  	  </div>
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">来源</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="text" class="form-control" name="copyfrom" value="{$article.copyfrom}">
+	  	    </div>
+	  	  </div>
+
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">内容</label>
+	  	    <div class="col-sm-9">
+	  	      <textarea name="content" id="content">{$article.content}</textarea>
+	  	      <script>
+				var ue = UE.getEditor('content',{
+					// toolbars: [
+					//         ['fullscreen', 'source', 'undo', 'redo', 'bold']
+					//     ],
+					autoHeightEnabled: true,
+					autoFloatEnabled: true
+				});
+	  	      </script>
+	  	    </div>
+	  	  </div>
+
+		  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">发布时间</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="text" class="form-control" name="publishtime" id="time" value="{$article.publishtime|date='Y/m/d H:i:s',###}">
+	  	      <script>
+	  	      	$('#time').datetimepicker({
+	  	      		dayOfWeekStart : 1,
+	  	      		lang:'en',
+	  	      		startDate:'1986/01/05',
+	  	      		format:'Y/m/d H:i:s',
+	  	      		formatTime:'H:i:s',
+	  	      		formatDate:'d.m.Y',
+	  	      	});
+	  	      </script>
+	  	    </div>
+	  	  </div>
+	  	  <input type="hidden" name="id" value="{$article.id}">
+
+	  	  <div class="form-group">
+	  	    <div class="col-sm-offset-2 col-sm-9">
+	  	      <button type="submit" class="btn btn-primary">提交</button>
+	  	      <button type="reset" class="btn btn-default">取消</button>
+	  	    </div>
+	  	  </div>
+	  	</form>
+	  </div>
+	</div>
+</block>

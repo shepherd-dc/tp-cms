@@ -1,0 +1,16 @@
+<extend name="Index:index"/>
+<block name="title"><title>查看管理员资料</title></block>
+<block name="main">
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">查看资料</h3>
+	  </div>
+	  <div class="panel-body" style="padding:20px;">
+	    <p>用户名：{$admin['username']}</p>
+	    <p>真实姓名：{$admin['realname']}</p>
+	    <p>邮箱：{$admin['email']}</p>
+	    <p>上次登录时间：{:date('Y-m-d H:i:s',$admin['logintime'])}</p>
+	    <p style="margin-bottom:0px">上次登录IP：{$admin['loginip']}</p>
+	  </div>
+	</div>
+</block>

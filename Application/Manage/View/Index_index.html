@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<block name="title"><title>后台首页</title></block>
+	<block name="source">
+		<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.css">
+		<script src="__PUBLIC__/js/jquery-1.9.1.js"></script>
+		<script src="__PUBLIC__/bootstrap/js/bootstrap.js"></script>
+	</block>
+
+	<style>
+		.list-group{margin-bottom:5px;}
+		.page-header{margin-top:0;margin-bottom:10px;}
+		.breadcrumb{margin-bottom:0;}
+		.subcategory{background-color:#fff;border:1px solid #eee;}
+
+		.row-margin{margin:20px 0;}
+		.col-padding{padding-left:0;}
+		.panel-body{padding-top:30px;}
+
+		.litpic-btn{position:relative;z-index:0;}
+		.litpic-tip{padding-left:15px;color:#5cb85c;}
+		#fileupload{position:absolute;top:0;left:0;font-size:0;opacity:0;cursor:pointer;z-index:10;}
+	</style>
+	<script>
+		/*
+		文档加载完成后自动执行jQuery
+		 */
+		$(function(){
+			//侧边栏折叠
+			$('.list-group .active').nextAll().hide();
+			$('.list-group .active').click(function(){
+				$(this).nextAll().toggle();
+				return false;//取消a链接默认跳转行为
+			});
+			//分割返回字符串：控制器名
+			var obj = window.location.pathname;
+			var str = obj.split('/')
+			var ctrl = str[3].toString();
+			$('.'+ctrl).nextAll().show();
+
+
+			//ajax上传图片 jquery.form.js插件
+			var litpic_tip = $('.litpic-tip');
+			var btn = $('.litpic-btn span');
+			$('#fileupload').wrap("<form id='myupload' action='{:U('Public/upload')}' method='post' enctype='multipart/form-data'></form>");
+			$('#fileupload').change(function(){
+				if( $('#fileupload').val()=='' ) return;
+				$('#myupload').ajaxSubmit({
+					dataType: 'json',
+					beforeSend: function(){
+						$('#litpic-show').empty();
+						btn.html('上传中……');
+					},
+					success: function(data){
+						if(data.state=='SUCCESS'){
+							litpic_tip.html( "" + data.info[0].name + "上传成功（" + data.info[0].size + "k）" );
+							var img = data.info[0].url;//原图:"url":"img\/2017-11-12\/5a0808563305f.jpg"
+							var timg = data.info[0].turl;//缩略图:"turl":"img\/2017-11-12\/thumb_300*300-5a0808563305f.jpg"
+							$('#litpic-show').html("<img src='__UPLOADS__"+timg+"'>");
+							$('#litpic').val(timg);
+						}else{
+							litpic_tip.html(data.state);
+						}
+						btn.html('添加缩略图');
+					},
+					error: function(xhr){
+						btn.html('上传失败');
+						litpic_tip.html(xhr);
+					}
+				});
+			});
+			
+			
+		});
+
+		/*
+		Ajax通讯获取栏目列表，追加至相应栏目
+		 */
+		function getCate(){
+			$.get("{:U('Index/getParentCate')}",{'pid':0,'rnd':Math.random()},function(data){
+				if( !isNaN(data.count) && data.count>0 ){
+					$('#menulist').nextAll().remove();
+				}
+				if( data.list && (typeof data.list == 'object') ){
+					$.each(data.list,function(i,v){
+						var html = '<a class="list-group-item" href="'+v.url+'">'+v.name+'</a>';
+						$('#menulist').after(html);
+						$('#menulist').nextAll().hide();
+					});
+				}
+			});
+		}
+		getCate();
+
+		/*
+		跳转网址
+		 */
+		function goUrl(url){
+			if( !url ){
+				return false;
+			}
+			location.href = url;
+		}
+
+		/*
+		确认后跳转到指定URL
+		 */
+		function toConfirm(url, str='确定要删除吗？'){
+			if( window.confirm(str) ){
+				location.href = url;
+			}
+		}
+
+		/*
+		确认后跳转到指定URL，并提交表单
+		 */
+		function toConfirmBatch(url, str='确定要批量删除吗？'){
+			if( !getCheckboxNum() ){
+				alert('请选择');
+				return false;
+			}
+			if( window.confirm(str) ){
+				$('#form_do').attr({'action':url}).submit();
+			}
+		}
+
+		/*
+		获取checkbox被选择个数
+		 */
+		function getCheckboxNum(){
+			var checkbox = $(':checkbox[name="key[]"]');
+			var j = 0;
+			for( var i=0; i<checkbox.length; i++ ){
+				if(checkbox[i].checked){
+					j++;
+				}
+			}
+			return j;
+		}
+
+		
+
+	</script>
+	
+</head>
+<body>
+	<div class="container">
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="{:U('Index/index')}">iMooc</a>
+		    </div>
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+		        <li><a href="#">Link</a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+		            <li><a href="#">Action</a></li>
+		            <li><a href="#">Another action</a></li>
+		            <li><a href="#">Something else here</a></li>
+		            <li role="separator" class="divider"></li>
+		            <li><a href="#">Separated link</a></li>
+		            <li role="separator" class="divider"></li>
+		            <li><a href="#">One more separated link</a></li>
+		          </ul>
+		        </li>
+		      </ul>
+		      <form class="navbar-form navbar-left">
+		        <div class="form-group">
+		          <input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+		      </form>
+		      <ul class="nav navbar-nav navbar-right">
+		        <li><a href="/index.php/Home/Index/index">Home</a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$Think.session.adm_username} <span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+		            <li><a href="#">Action</a></li>
+		            <li><a href="#">Another action</a></li>
+		            <li><a href="#">Something else here</a></li>
+		            <li role="separator" class="divider"></li>
+		            <li><a href="{:U('Login/logout')}">注销账号</a></li>
+		          </ul>
+		        </li>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+
+
+
+		<div class="row">
+			<div class="col-md-2">
+
+				<div class="list-group">
+				  <a href="" class="list-group-item active Category">
+				    栏目管理
+				  </a>
+				  <a href="{:U('Category/index')}" class="list-group-item">栏目列表</a>
+				  <a href="{:U('Category/add')}" class="list-group-item">添加栏目</a>
+				</div>
+
+				<div class="list-group">
+				  <a href="" class="list-group-item active Article Page" id="menulist">
+				    新闻管理
+				  </a>
+				  
+				</div>
+
+				<div class="list-group">
+				  <a href="" class="list-group-item active Model">
+				    模型管理
+				  </a>
+				  <a href="{:U('Model/index')}" class="list-group-item">模型列表</a>
+				  <a href="{:U('Model/add')}" class="list-group-item">添加模型</a>
+				</div>
+
+				<div class="list-group">
+				  <a href="" class="list-group-item active Manager">
+				    管理员信息
+				  </a>
+				  <a href="{:U('Manager/index')}" class="list-group-item">查看资料</a>
+				  <a href="{:U('Manager/editInfo')}" class="list-group-item">修改资料</a>
+				  <a href="{:U('Manager/editPsw')}" class="list-group-item">修改密码</a>
+				  <a href="{:U('Manager/add')}" class="list-group-item">添加管理员</a>
+				</div>
+
+			</div>
+
+			<div class="col-md-10">
+
+			<block name="main">
+				<div class="panel panel-primary">
+				  <div class="panel-heading">
+				    <h3 class="panel-title">管理员信息</h3>
+				  </div>
+				  <div class="panel-body">
+				    <p>您好，{:session('adm_username')}！</p>
+				    <p>上次登录时间：{$Think.session.adm_logintime}</p>
+				    <p style="margin-bottom:0px">上次登录IP：<?php echo session('adm_loginip'); ?></p>
+				  </div>
+				</div>
+
+				<div class="panel panel-primary">
+				  <div class="panel-heading">
+				    <h3 class="panel-title">系统信息</h3>
+				  </div>
+				  <div class="panel-body">
+				    <p>操作系统：{$os}</p>
+				    <p>服务器软件：{$software}</p>
+				    <p style="margin-bottom:0px">上传文件：{$environment_upload}</p>
+				  </div>
+				</div>
+
+				<div class="panel panel-primary">
+				  <div class="panel-heading">
+				    <h3 class="panel-title">开发团队</h3>
+				  </div>
+				  <div class="panel-body">
+				    <p>官方网站：<a href="http://www.thinkphp.cn" target="_blank">www.thinkphp.cn</a></p>
+				    <p>官方手册：<a href="https://www.kancloud.cn/manual/thinkphp" target="_blank">ThinkPHP3.2.3手册</a></p>
+				    <p style="margin-bottom:0px">开发者：Shepherd Young</p>
+				  </div>
+				</div>
+			</block>
+
+			</div>
+
+		</div>
+
+		<div class="panel panel-default">
+		  <div class="panel-body">
+		    Panel content
+		  </div>
+		  <div class="panel-footer">Panel footer</div>
+		</div>
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<extend name="Index:index"/>
+<block name="title"><title>修改栏目</title></block>
+<block name="main">
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">修改栏目</h3>
+	  </div>
+	  <div class="panel-body">
+	  	<form action="{:U('Category/update')}" method="post" class="form-horizontal">
+	  	  
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">所属栏目</label>
+	  	    <div class="col-sm-9">
+	  	      <select class="form-control" name="pid">
+	  	      	<option value="0">顶级栏目</option>
+	  	      	<foreach name="cate" item="vol">
+		  	      <if condition="$data['pid'] eq $vol['id']">	
+		  	        <option value="{$vol.id}" selected>{$vol.delimiter}{$vol.name}</option>
+		  	      <else/>
+		  	        <option value="{$vol.id}">{$vol.delimiter}{$vol.name}</option>
+		  	      </if>
+	  	        </foreach>
+	  	      </select>
+	  	    </div>
+	  	  </div>
+
+	  	  <div class="form-group" style="margin-top:15px">
+	  	    <label for="" class="col-sm-2 control-label">内容模型</label>
+	  	    <div class="col-sm-9">
+	  	      <select class="form-control" name="modelid">
+	  	      	<foreach name="modelList" item="mod">
+	  	        <option value="{$mod.id}" <if condition="$data['modelid'] eq $mod['id']">selected</if> >{$mod.name}</option>
+	  	        </foreach>
+	  	      </select>
+	  	    </div>
+	  	  </div>
+
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">栏目名称</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="text" class="form-control" name="name" value="{$data['name']}">
+	  	    </div>
+	  	  </div>
+
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">列表模板</label>
+	  	    <div class="col-sm-9">
+	  	      <select class="form-control" name="template_list">
+	  	      	<foreach name="styleListList" item="list">
+		  	      <if condition="$list==$data['template_list']">	
+		  	        <option value="{$list}" selected>{$list}</option>
+		  	      <else/>
+		  	        <option value="{$list}">{$list}</option>
+		  	      </if>
+	  	        </foreach>
+	  	      </select>
+	  	    </div>
+	  	  </div>
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">内容页模板</label>
+	  	    <div class="col-sm-9">
+	  	      <select class="form-control" name="template_show">
+	  	      	<foreach name="styleShowList" item="show">
+	  	          <if condition="$show==$data['template_show']">	
+		  	        <option value="{$show}" selected>{$show}</option>
+		  	        <else/>
+		  	        <option value="{$show}">{$show}</option>
+		  	      </if>
+	  	        </foreach>
+	  	      </select>
+	  	    </div>
+	  	  </div>
+
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">排序</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="text" name="sort" class="form-control" value="{$data.sort}">
+	  	    </div>
+	  	  </div>
+
+	  	  <div class="form-group">
+	  	    <label for="" class="col-sm-2 control-label">显示</label>
+	  	    <div class="col-sm-9">
+	  	      <label class="radio-inline">
+	  	        <input type="radio" name="status" value="1" <if condition="$data['status']==1">checked</if> > 显示
+	  	      </label>
+	  	      <label class="radio-inline">
+	  	        <input type="radio" name="status" value="0" <if condition="$data['status']==0">checked</if> > 隐藏
+	  	      </label>
+	  	    </div>
+	  	  </div>
+		  <input type="hidden" name="id" value="{$data.id}">
+		  <input type="hidden" name="">
+	  	  <div class="form-group">
+	  	    <div class="col-sm-offset-2 col-sm-10">
+	  	      <button type="submit" class="btn btn-primary">提交</button>
+	  	      <button type="reset" class="btn btn-default">取消</button>
+	  	    </div>
+	  	  </div>
+	  	</form>
+	  </div>
+	</div>
+</block>

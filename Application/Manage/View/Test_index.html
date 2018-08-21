@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+	<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.css">
+	<script src="__PUBLIC__/js/jquery-1.9.1.js"></script>
+	<script src="__PUBLIC__/bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+
+			<div class="page-header">
+				<ol class="breadcrumb">
+				  <li><span class="glyphicon glyphicon-tasks"></span> {$type}</li>
+				</ol>
+			</div>
+		  	<form action="{:U('Manager/insert')}" method="post" class="form-horizontal">
+		  	  
+		  	  <div class="form-group">
+		  	    <label for="" class="col-sm-2 control-label">用户名</label>
+		  	    <div class="col-sm-9">
+		  	      <input type="text" class="form-control" name="username" placeholder="Username">
+		  	    </div>
+		  	  </div>
+		  	  <div class="form-group">
+		  	    <label for="" class="col-sm-2 control-label">密　码</label>
+		  	    <div class="col-sm-9">
+		  	      <input type="password" class="form-control" name="password" placeholder="Password">
+		  	    </div>
+		  	  </div>
+		  	  <div class="form-group">
+		  	    <label for="" class="col-sm-2 control-label">确认密码</label>
+		  	    <div class="col-sm-9">
+		  	      <input type="password" class="form-control" name="repassword" placeholder="Repassword">
+		  	    </div>
+		  	  </div>
+		  	  <div class="form-group">
+		  	    <div class="col-sm-offset-2 col-sm-10">
+		  	      <button type="submit" class="btn btn-primary">提交</button>
+		  	      <button type="reset" class="btn btn-default">取消</button>
+		  	    </div>
+		  	  </div>
+		  	</form>
+		</div>
+	</div>
+	
+</body>
+</html>

@@ -1,0 +1,11 @@
+.DS_Store
+**/Runtime/
+
+# Editor directories and files
+.idea
+.vscode
+.svn
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

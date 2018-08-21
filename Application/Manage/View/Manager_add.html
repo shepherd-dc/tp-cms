@@ -1,0 +1,38 @@
+<extend name="Index:index"/>
+<block name="title"><title>添加管理员</title></block>
+<block name="main">
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">添加管理员</h3>
+	  </div>
+	  <div class="panel-body">
+	  	<form action="{:U('Manager/insert')}" method="post" class="form-horizontal">
+	  	  
+	  	  <div class="form-group">
+	  	    <label for="inputPassword" class="col-sm-2 control-label">用户名</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="text" class="form-control" name="username" placeholder="Username">
+	  	    </div>
+	  	  </div>
+	  	  <div class="form-group">
+	  	    <label for="inputPassword" class="col-sm-2 control-label">密　码</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="password" class="form-control" name="password" placeholder="Password">
+	  	    </div>
+	  	  </div>
+	  	  <div class="form-group">
+	  	    <label for="inputPassword" class="col-sm-2 control-label">确认密码</label>
+	  	    <div class="col-sm-9">
+	  	      <input type="password" class="form-control" name="repassword" placeholder="Repassword">
+	  	    </div>
+	  	  </div>
+	  	  <div class="form-group">
+	  	    <div class="col-sm-offset-2 col-sm-10">
+	  	      <button type="submit" class="btn btn-primary">提交</button>
+	  	      <button type="reset" class="btn btn-default">取消</button>
+	  	    </div>
+	  	  </div>
+	  	</form>
+	  </div>
+	</div>
+</block>
