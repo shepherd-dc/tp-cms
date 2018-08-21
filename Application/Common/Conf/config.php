@@ -8,4 +8,6 @@ return array(
 	'TMPL_ACTION_ERROR'     =>  './Data/resource/system/jump.html', //错误跳转页面
 	'TMPL_ACTION_SUCCESS'   =>  './Data/resource/system/jump.html', //成功跳转页面
 	'TMPL_EXCEPTION_FILE'   =>  './Data/resource/system/exception.html', //异常页面
+
+	'URL_MODEL'             =>  2
 );
